@@ -1,0 +1,21 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# local object storage + recordings (never commit workout media)
+data/
+*.mov
+*.mp4
+*.webm
+
+.DS_Store
+apps/web/public/mediapipe/

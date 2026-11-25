@@ -1,0 +1,10 @@
+{
+  "name": "Exercise Pal",
+  "short_name": "Exercise Pal",
+  "description": "Your training buddy. Point the camera, talk, train.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1412",
+  "theme_color": "#0f1412",
+  "icons": []
+}
