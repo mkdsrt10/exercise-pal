@@ -30,11 +30,27 @@ from your phone over [Tailscale](https://tailscale.com).
    This starts MinIO (storage, `localhost:9000`, console on `localhost:9001`) and the app on
    `localhost:3000`. Data lives in `./data/minio`.
 
+   If the Docker VM can't reach the npm registry (`npm ci` times out inside the build), build on the
+   host and let Docker only package it:
+
+   ```bash
+   npm install && npm run build
+   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml up -d --build
+   ```
+
 4. Expose it on your tailnet:
 
    ```bash
    tailscale serve --bg 3000
    tailscale serve status   # shows the https://… address
+   ```
+
+   If port 443 is already serving something else, give Exercise Pal its own HTTPS port. It stays
+   tailnet-only unless you turn on Funnel for that port (don't):
+
+   ```bash
+   tailscale serve --bg --https=8443 http://127.0.0.1:3000
+   # https://<machine>.<tailnet>.ts.net:8443
    ```
 
 5. On your phone (signed in to the same tailnet), open the address and *Add to Home Screen*.

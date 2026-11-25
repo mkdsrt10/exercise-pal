@@ -1,0 +1,8 @@
+# Use when the Docker VM can't reach the npm registry:
+#   npm install && npm run build
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml up -d --build
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.prebuilt
