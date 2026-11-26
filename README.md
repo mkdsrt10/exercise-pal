@@ -41,7 +41,8 @@ Phone camera ──► pose tracking on the phone (MediaPipe) ──► rep coun
                          few small keyframes + numbers (no video) ──► your server
                                                                          │
              Gemini Decision 1: which exercise / which weight / form scores, with confidence
-             Anthropic API:     supportive review in a fixed, typed shape
+             Review model:      supportive review in a fixed, typed shape
+                                (Gemini, Anthropic API key or login, or Amazon Bedrock)
                                                                          │
                                          S3-compatible storage (MinIO) ◄─┘
 ```
@@ -60,7 +61,7 @@ Phone camera ──► pose tracking on the phone (MediaPipe) ──► rep coun
 ## Run it
 
 ```bash
-cp .env.example .env        # add your API keys
+cp .env.example .env        # add GEMINI_API_KEY (enough on its own), or see HOSTING.md for login / Bedrock
 docker compose up -d --build  # MinIO + the app on localhost
 tailscale serve --bg 3000   # HTTPS on your tailnet, so the phone camera works
 ```

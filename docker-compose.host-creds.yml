@@ -1,0 +1,18 @@
+# Lets the app container use credentials already on the host instead of API keys in .env:
+#   - Anthropic login profile from `ant auth login`   (~/.config/anthropic)
+#   - AWS credentials for Bedrock                     (~/.aws)
+# Add this file to your compose command, e.g.
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml -f docker-compose.host-creds.yml up -d --build
+services:
+  web:
+    # Run as your host user so the container can read your 0600 credential files.
+    user: "${HOST_UID:-501}:${HOST_GID:-20}"
+    environment:
+      HOME: /tmp
+      ANTHROPIC_CONFIG_DIR: /creds/anthropic
+      AWS_CONFIG_FILE: /creds/aws/config
+      AWS_SHARED_CREDENTIALS_FILE: /creds/aws/credentials
+    volumes:
+      # Read-write: the SDK refreshes the short-lived login token in place.
+      - ${HOME}/.config/anthropic:/creds/anthropic
+      - ${HOME}/.aws:/creds/aws:ro

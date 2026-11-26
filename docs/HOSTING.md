@@ -55,6 +55,30 @@ from your phone over [Tailscale](https://tailscale.com).
 
 5. On your phone (signed in to the same tailnet), open the address and *Add to Home Screen*.
 
+## Choose how reviews are powered
+
+Rep counting, voice logging and history work with no keys at all. The written review after each set
+needs one of these (set `COACH_PROVIDER`, or leave it on `auto` to use the first one that's set up):
+
+| Option | What you set | Notes |
+|---|---|---|
+| **Gemini key only** | `GEMINI_API_KEY` | Simplest: one key runs both the review (`GEMINI_COACH_MODEL`, default `gemini-3.8-flash`) and the decision scoring. |
+| **Anthropic login, no key** | Run `ant auth login` on the host once | Uses a short-lived token from your Claude Console account instead of a stored key. Add `docker-compose.host-creds.yml` so the container can see the login. Re-run `ant auth login` if it ever stops working (refresh tokens expire). Billed as normal API usage. |
+| **Anthropic API key** | `ANTHROPIC_API_KEY` | |
+| **Amazon Bedrock** | `BEDROCK_REGION` + `AWS_PROFILE` (or AWS keys) | Uses your AWS credentials. Add `docker-compose.host-creds.yml` to share `~/.aws` with the container. Model access for `BEDROCK_MODEL` must be enabled in that region. |
+
+The decision scoring (which exercise, which weight, form scores) always uses `GEMINI_API_KEY`. Without
+it, the review still runs; you just get fewer automatic guesses.
+
+A Claude.ai / Claude Code subscription login can't be used by the app; `ant auth login` signs in to a
+Claude Console organization and bills API usage there.
+
+With host credentials:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml -f docker-compose.host-creds.yml up -d --build
+```
+
 ## Storage
 
 All reads and writes use the S3 API (`apps/web/lib/server/store.ts`). To move off MinIO, point these

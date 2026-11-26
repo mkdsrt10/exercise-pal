@@ -77,7 +77,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   updated.decisions = decisions;
 
   let reviewError: string | null = null;
-  if (process.env.ANTHROPIC_API_KEY) {
+  {
     try {
       updated.review = await reviewSet({
         set: updated,
