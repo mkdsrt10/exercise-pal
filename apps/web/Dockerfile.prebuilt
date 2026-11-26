@@ -2,7 +2,9 @@
 # containers can't reach the npm registry. Used by docker-compose.prebuilt.yml.
 FROM node:24-alpine
 WORKDIR /app
-ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0 \
+    # Docker VMs often connect slower than Node's 250 ms per-address default, which makes fetch time out.
+    NODE_OPTIONS=--network-family-autoselection-attempt-timeout=2000
 COPY apps/web/.next/standalone ./
 COPY apps/web/.next/static ./apps/web/.next/static
 COPY apps/web/public ./apps/web/public
